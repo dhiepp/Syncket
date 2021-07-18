@@ -1,0 +1,18 @@
+name: Syncket
+version: ${project.version}
+main: com.dhiep.syncket.Syncket
+authors: [ dhiep ]
+description: Sync commands using socket!
+website: 3fmc.com
+commands:
+  sync:
+    description: Send a command from Client to Server
+    usage: /<command>
+  syncket:
+    description: Manage plugin
+    usage: /<command>
+permissions:
+  syncket.use:
+    description: Use sync command
+  syncket.admin:
+    description: Use syncket command
