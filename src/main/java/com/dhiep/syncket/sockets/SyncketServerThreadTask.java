@@ -8,8 +8,11 @@ import com.google.gson.*;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class SyncketServerThreadTask extends BukkitRunnable {
@@ -22,8 +25,8 @@ public class SyncketServerThreadTask extends BukkitRunnable {
     SyncketServerThreadTask(Socket client) {
         try {
             this.client = client;
-            this.scanner = new Scanner(client.getInputStream());
-            this.writer = new PrintWriter(client.getOutputStream());
+            this.scanner = new Scanner(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
+            this.writer = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8));
             this.identifier = "";
             this.authorized = false;
         } catch (IOException exception) {

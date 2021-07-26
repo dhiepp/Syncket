@@ -7,10 +7,10 @@ import com.dhiep.syncket.utils.LogUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class SyncketClientTask extends SyncketRunnable {
@@ -33,8 +33,8 @@ public class SyncketClientTask extends SyncketRunnable {
                 client.connect(new InetSocketAddress(SyncketManager.getIp(), SyncketManager.getPort()), SyncketManager.getPulse());
                 LogUtil.info("Connected to syncket server!");
 
-                scanner = new Scanner(client.getInputStream());
-                writer = new PrintWriter(client.getOutputStream());
+                scanner = new Scanner(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
+                writer = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8));
 
                 authorize();
                 while (scanner.hasNext()) {
