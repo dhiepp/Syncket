@@ -25,6 +25,7 @@ public class SyncketServerThreadTask extends BukkitRunnable {
 
     SyncketServerThreadTask(SyncketServerTask server, Socket client) {
         try {
+            this.server = server;
             this.client = client;
             this.scanner = new Scanner(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
             this.writer = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8));
@@ -76,8 +77,8 @@ public class SyncketServerThreadTask extends BukkitRunnable {
             LogUtil.severe("Cannot close client!");
             exception.printStackTrace();
         }
-        this.cancel();
         server.remove(this);
+        this.cancel();
     }
 
     public boolean authorize() {
