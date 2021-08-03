@@ -53,6 +53,7 @@ public class SyncketServerTask extends SyncketRunnable {
     }
 
     public boolean send(String source, SendMode mode, ActionType action, String target, JsonElement data) {
+        if (source == null) source = SyncketManager.getIdentifier();
         switch (mode) {
             case SERVER:
                 SyncketManager.execute(source, action, data);
