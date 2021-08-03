@@ -43,7 +43,7 @@ public class SyncketClientTask extends SyncketRunnable {
 
                     JsonObject json;
                     try {
-                        json = JsonUtil.decode(message, "action", "data");
+                        json = JsonUtil.decode(message, "action", "source", "data");
                     } catch (Exception exception) {
                         LogUtil.warn("Received invalid data from server");
                         LogUtil.warn(exception.getMessage());
@@ -52,9 +52,10 @@ public class SyncketClientTask extends SyncketRunnable {
 
                     try {
                         ActionType action = ActionType.valueOf(json.get("action").getAsString());
+                        String source = json.get("source").isJsonNull() ? "" : json.get("source").getAsString();
                         JsonElement data = json.get("data");
 
-                        SyncketManager.execute(action, data);
+                        SyncketManager.execute(source, action, data);
                     } catch (Exception exception) {
                         LogUtil.warn("Received malformed data from server: " + exception.getMessage());
                     }
@@ -83,7 +84,7 @@ public class SyncketClientTask extends SyncketRunnable {
     }
 
     @Override
-    public boolean send(SendMode mode, ActionType action, String target, JsonElement data) {
+    public boolean send(String source, SendMode mode, ActionType action, String target, JsonElement data) {
         JsonObject json = new JsonObject();
         json.addProperty("mode", mode.toString());
         json.addProperty("action", action.toString());

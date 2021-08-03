@@ -7,16 +7,16 @@ import org.bukkit.event.HandlerList;
 public class CustomSyncketEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private final String identifier;
+    private final String source;
     private final JsonElement data;
 
-    public CustomSyncketEvent(String identifier, JsonElement data) {
-        this.identifier = identifier;
+    public CustomSyncketEvent(String source, JsonElement data) {
+        this.source = source;
         this.data = data;
     }
 
-    public String getIdentifier() {
-        return identifier;
+    public String getSource() {
+        return source;
     }
 
     public JsonElement getData() {

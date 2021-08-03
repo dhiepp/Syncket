@@ -8,7 +8,6 @@ import com.dhiep.syncket.models.SyncketType;
 import com.dhiep.syncket.utils.LogUtil;
 import com.dhiep.syncket.utils.MessageUtil;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -71,14 +70,20 @@ public class SyncketManager {
 
     public static boolean send(SendMode mode, ActionType action, String target, JsonElement data) {
         if (task == null) return false;
-        return task.send(mode, action, target, data);
+        return task.send(identifier, mode, action, target, data);
+    }
+
+    public static boolean send(String source, SendMode mode, ActionType action, String target, JsonElement data) {
+        if (task == null) return false;
+        if (source == null) source = identifier;
+        return task.send(source, mode, action, target, data);
     }
 
     public static void stop() {
         task.stop();
     }
 
-    public static void execute(ActionType type, JsonElement data) {
+    public static void execute(String source, ActionType type, JsonElement data) {
         Bukkit.getScheduler().runTask(Syncket.getInstance(), () -> {
             switch (type) {
                 case BROADCAST:
@@ -88,7 +93,7 @@ public class SyncketManager {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), data.getAsString());
                     break;
                 case EVENT:
-                    CustomSyncketEvent event = new CustomSyncketEvent(identifier, data);
+                    CustomSyncketEvent event = new CustomSyncketEvent(source, data);
                     Bukkit.getPluginManager().callEvent(event);
                     break;
             }

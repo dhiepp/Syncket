@@ -62,7 +62,7 @@ public class SyncketServerThreadTask extends BukkitRunnable {
                 String target = json.get("target").isJsonNull() ? "" : json.get("target").getAsString();
                 JsonElement data = json.get("data");
 
-                SyncketManager.send(mode, action, target, data);
+                SyncketManager.send(this.identifier, mode, action, target, data);
             } catch (Exception exception) {
                 LogUtil.warn("Received malformed data from " + client);
                 LogUtil.warn(exception.getMessage());
@@ -110,10 +110,11 @@ public class SyncketServerThreadTask extends BukkitRunnable {
         return identifier;
     }
 
-    public boolean send(ActionType action, JsonElement data) {
+    public boolean send(String source, ActionType action, JsonElement data) {
         if (!authorized) return false;
 
         JsonObject json = new JsonObject();
+        json.addProperty("source", source);
         json.addProperty("action", action.toString());
         json.add("data", data);
 
