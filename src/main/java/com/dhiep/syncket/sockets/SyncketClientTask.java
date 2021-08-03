@@ -39,7 +39,7 @@ public class SyncketClientTask extends SyncketRunnable {
                 authorize();
                 while (scanner.hasNext()) {
                     String message = scanner.nextLine();
-                    LogUtil.debug("Received message from server:" + message);
+                    LogUtil.debug("Received message from server: " + message);
 
                     JsonObject json;
                     try {
@@ -84,7 +84,7 @@ public class SyncketClientTask extends SyncketRunnable {
     }
 
     @Override
-    public boolean send(String source, SendMode mode, ActionType action, String target, JsonElement data) {
+    public boolean send(SendMode mode, ActionType action, String target, JsonElement data) {
         JsonObject json = new JsonObject();
         json.addProperty("mode", mode.toString());
         json.addProperty("action", action.toString());

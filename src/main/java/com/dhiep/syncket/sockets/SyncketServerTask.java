@@ -34,7 +34,7 @@ public class SyncketServerTask extends SyncketRunnable {
                 Socket client = server.accept();
                 LogUtil.debug("Accepted client: " + client);
 
-                SyncketServerThreadTask task = new SyncketServerThreadTask(client);
+                SyncketServerThreadTask task = new SyncketServerThreadTask(this, client);
                 task.runTaskAsynchronously(Syncket.getInstance());
                 connectedTasks.add(task);
             } catch (SocketException exception) {
@@ -48,6 +48,10 @@ public class SyncketServerTask extends SyncketRunnable {
     }
 
     @Override
+    public boolean send(SendMode mode, ActionType action, String target, JsonElement data) {
+        return send(null, mode, action, target, data);
+    }
+
     public boolean send(String source, SendMode mode, ActionType action, String target, JsonElement data) {
         switch (mode) {
             case SERVER:
@@ -63,13 +67,14 @@ public class SyncketServerTask extends SyncketRunnable {
                     SyncketManager.execute(source, action, data);
                     return true;
                 }
+                boolean sent = false;
                 for (SyncketServerThreadTask task : connectedTasks) {
                     if (task.getIdentifier().equalsIgnoreCase(target)) {
                         task.send(source, action, data);
-                        return true;
+                        sent = true;
                     }
                 }
-                return false;
+                return sent;
             case ALL:
                 SyncketManager.execute(source, action, data);
                 for (SyncketServerThreadTask task : connectedTasks) {
@@ -88,6 +93,10 @@ public class SyncketServerTask extends SyncketRunnable {
                 return true;
         }
         return false;
+    }
+
+    public void remove(SyncketServerThreadTask task) {
+        connectedTasks.remove(task);
     }
 
     @Override

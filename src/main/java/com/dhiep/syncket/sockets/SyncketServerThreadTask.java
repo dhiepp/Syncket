@@ -16,13 +16,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class SyncketServerThreadTask extends BukkitRunnable {
+    private SyncketServerTask server;
     private Socket client;
     private Scanner scanner;
     private PrintWriter writer;
     private String identifier;
     private boolean authorized;
 
-    SyncketServerThreadTask(Socket client) {
+    SyncketServerThreadTask(SyncketServerTask server, Socket client) {
         try {
             this.client = client;
             this.scanner = new Scanner(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
@@ -62,7 +63,7 @@ public class SyncketServerThreadTask extends BukkitRunnable {
                 String target = json.get("target").isJsonNull() ? "" : json.get("target").getAsString();
                 JsonElement data = json.get("data");
 
-                SyncketManager.send(this.identifier, mode, action, target, data);
+                server.send(this.identifier, mode, action, target, data);
             } catch (Exception exception) {
                 LogUtil.warn("Received malformed data from " + client);
                 LogUtil.warn(exception.getMessage());
@@ -76,6 +77,7 @@ public class SyncketServerThreadTask extends BukkitRunnable {
             exception.printStackTrace();
         }
         this.cancel();
+        server.remove(this);
     }
 
     public boolean authorize() {
@@ -97,7 +99,7 @@ public class SyncketServerThreadTask extends BukkitRunnable {
                 String password = json.get("password").getAsString();
                 if (!SyncketManager.getPassword().equals(password)) return false;
 
-                identifier = json.get("identifier").getAsString();
+                this.identifier = json.get("identifier").getAsString();
                 return true;
             } catch (Exception exception) {
                 LogUtil.warn("Received malformed data from " + client + ": " + exception.getMessage());

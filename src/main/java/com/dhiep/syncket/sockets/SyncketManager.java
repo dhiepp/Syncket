@@ -70,13 +70,7 @@ public class SyncketManager {
 
     public static boolean send(SendMode mode, ActionType action, String target, JsonElement data) {
         if (task == null) return false;
-        return task.send(identifier, mode, action, target, data);
-    }
-
-    public static boolean send(String source, SendMode mode, ActionType action, String target, JsonElement data) {
-        if (task == null) return false;
-        if (source == null) source = identifier;
-        return task.send(source, mode, action, target, data);
+        return task.send(mode, action, target, data);
     }
 
     public static void stop() {
