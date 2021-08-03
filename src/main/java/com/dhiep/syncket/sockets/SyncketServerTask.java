@@ -5,7 +5,6 @@ import com.dhiep.syncket.models.ActionType;
 import com.dhiep.syncket.models.SendMode;
 import com.dhiep.syncket.utils.LogUtil;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.net.*;
@@ -72,7 +71,13 @@ public class SyncketServerTask extends SyncketRunnable {
                 }
                 return false;
             case ALL:
-                if (SyncketManager.getIdentifier().equalsIgnoreCase(target)) {
+                SyncketManager.execute(action, data);
+                for (SyncketServerThreadTask task : connectedTasks) {
+                    task.send(action, data);
+                }
+                return true;
+            case OTHERS:
+                if (target != null) {
                     SyncketManager.execute(action, data);
                 }
                 for (SyncketServerThreadTask task : connectedTasks) {

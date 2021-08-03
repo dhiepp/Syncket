@@ -87,7 +87,7 @@ public class SyncketClientTask extends SyncketRunnable {
         JsonObject json = new JsonObject();
         json.addProperty("mode", mode.toString());
         json.addProperty("action", action.toString());
-        if (mode == SendMode.ALL) {
+        if (mode == SendMode.OTHERS) {
             target = SyncketManager.getIdentifier();
         }
         json.addProperty("target", target);

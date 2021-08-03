@@ -67,11 +67,13 @@ public class SyncCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 1) {
-            return Arrays.stream(SendMode.values()).map(Enum::toString).collect(Collectors.toList());
+            return Arrays.stream(SendMode.values()).map(Enum::toString)
+                    .filter(mode -> mode.startsWith(args[0])).collect(Collectors.toList());
         }
 
         if (args.length == 2) {
-            return Arrays.stream(ActionType.values()).map(Enum::toString).collect(Collectors.toList());
+            return Arrays.stream(ActionType.values()).map(Enum::toString)
+                    .filter(action -> action.startsWith(args[1])).collect(Collectors.toList());
         }
 
         return null;
