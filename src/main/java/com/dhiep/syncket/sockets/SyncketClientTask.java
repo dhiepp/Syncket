@@ -76,6 +76,7 @@ public class SyncketClientTask extends SyncketRunnable {
     public void authorize() {
         JsonObject json = new JsonObject();
         json.addProperty("password", SyncketManager.getPassword());
+        json.addProperty("group", SyncketManager.getGroup());
         json.addProperty("identifier", SyncketManager.getIdentifier());
 
         LogUtil.debug("Sending authorization packet");

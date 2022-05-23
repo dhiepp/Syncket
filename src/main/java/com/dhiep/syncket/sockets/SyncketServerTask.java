@@ -63,19 +63,32 @@ public class SyncketServerTask extends SyncketRunnable {
                     task.send(source, action, data);
                 }
                 return true;
+            case GROUP:
+                if (SyncketManager.getGroup().equalsIgnoreCase(target)) {
+                    SyncketManager.execute(source, action, data);
+                    return true;
+                }
+                boolean sent1 = false;
+                for (SyncketServerThreadTask task : connectedTasks) {
+                    if (task.getGroup().equalsIgnoreCase(target)) {
+                        task.send(source, action, data);
+                        sent1 = true;
+                    }
+                }
+                return sent1;
             case SPECIFIC:
                 if (SyncketManager.getIdentifier().equalsIgnoreCase(target)) {
                     SyncketManager.execute(source, action, data);
                     return true;
                 }
-                boolean sent = false;
+                boolean sent2 = false;
                 for (SyncketServerThreadTask task : connectedTasks) {
                     if (task.getIdentifier().equalsIgnoreCase(target)) {
                         task.send(source, action, data);
-                        sent = true;
+                        sent2 = true;
                     }
                 }
-                return sent;
+                return sent2;
             case ALL:
                 SyncketManager.execute(source, action, data);
                 for (SyncketServerThreadTask task : connectedTasks) {

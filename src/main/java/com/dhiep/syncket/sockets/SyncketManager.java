@@ -21,6 +21,7 @@ public class SyncketManager {
     private static String ip;
     private static int port;
     private static int pulse;
+    private static String group;
     private static String identifier;
     private static String password;
 
@@ -41,6 +42,7 @@ public class SyncketManager {
         ip = config.getString("ip", "127.0.0.1");
         port = config.getInt("port", 9999);
         pulse = config.getInt("pulse", 1000);
+        group = config.getString("group", "main");
         identifier = config.getString("identifier", "syncket");
         password = config.getString("password", "password");
     }
@@ -112,6 +114,10 @@ public class SyncketManager {
 
     public static int getPulse() {
         return pulse;
+    }
+
+    public static String getGroup() {
+        return group;
     }
 
     public static String getIdentifier() {

@@ -20,6 +20,7 @@ public class SyncketServerThreadTask extends BukkitRunnable {
     private Socket client;
     private Scanner scanner;
     private PrintWriter writer;
+    private String group;
     private String identifier;
     private boolean authorized;
 
@@ -29,6 +30,7 @@ public class SyncketServerThreadTask extends BukkitRunnable {
             this.client = client;
             this.scanner = new Scanner(new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
             this.writer = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8));
+            this.group = "";
             this.identifier = "";
             this.authorized = false;
         } catch (IOException exception) {
@@ -40,7 +42,7 @@ public class SyncketServerThreadTask extends BukkitRunnable {
     @Override
     public void run() {
         authorized = authorize();
-        if (authorized) LogUtil.info("Client connected as " + identifier + ": " + client);
+        if (authorized) LogUtil.info("Client connected as " + identifier + " (" + group + "): " + client);
         else LogUtil.warn("Authorization failed from: " + client);
 
         while (scanner.hasNext()) {
@@ -87,7 +89,7 @@ public class SyncketServerThreadTask extends BukkitRunnable {
 
             JsonObject json;
             try {
-                json = JsonUtil.decode(message, "password", "identifier");
+                json = JsonUtil.decode(message, "password", "group", "identifier");
             } catch (Exception exception) {
                 LogUtil.warn("Received invalid data from " + client);
                 LogUtil.warn(exception.getMessage());
@@ -100,6 +102,7 @@ public class SyncketServerThreadTask extends BukkitRunnable {
                 String password = json.get("password").getAsString();
                 if (!SyncketManager.getPassword().equals(password)) return false;
 
+                this.group = json.get("group").getAsString();
                 this.identifier = json.get("identifier").getAsString();
                 return true;
             } catch (Exception exception) {
@@ -107,6 +110,10 @@ public class SyncketServerThreadTask extends BukkitRunnable {
             }
         }
         return false;
+    }
+
+    public String getGroup() {
+        return group;
     }
 
     public String getIdentifier() {

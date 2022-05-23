@@ -3,5 +3,6 @@ type: CLIENT
 ip: 127.0.0.1
 port: 9999
 pulse: 1000
+group: "main"
 identifier: "syncket"
 password: "password"

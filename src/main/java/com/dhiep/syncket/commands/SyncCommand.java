@@ -32,7 +32,7 @@ public class SyncCommand implements CommandExecutor, TabCompleter {
         try {
             mode = SendMode.valueOf(args[0].toUpperCase(Locale.ROOT));
             action = ActionType.valueOf(args[1].toUpperCase(Locale.ROOT));
-            if (mode == SendMode.SPECIFIC) {
+            if (mode == SendMode.SPECIFIC || mode == SendMode.GROUP) {
                 if (args.length < 4) throw new IllegalArgumentException("Missing target");
                 target = args[2];
                 raw = Arrays.stream(args).skip(3).collect(Collectors.joining(" "));
