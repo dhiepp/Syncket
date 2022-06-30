@@ -13,16 +13,16 @@ import java.util.List;
 
 public class SyncketServerTask extends SyncketRunnable {
     private final List<SyncketServerThreadTask> connectedTasks = new ArrayList<>();
-    private final ServerSocket server;
+    private ServerSocket server;
     private boolean listen;
 
-    SyncketServerTask(ServerSocket server) {
-        this.server = server;
+    SyncketServerTask() {
         this.listen = true;
         try {
+            server = new ServerSocket();
             server.bind(new InetSocketAddress(SyncketManager.getIp(), SyncketManager.getPort()));
         } catch (IOException exception) {
-            LogUtil.severe("Cannot bind server socket!");
+            LogUtil.severe("Cannot open server socket!");
             exception.printStackTrace();
         }
     }

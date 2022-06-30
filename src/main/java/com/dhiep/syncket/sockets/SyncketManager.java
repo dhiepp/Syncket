@@ -49,24 +49,17 @@ public class SyncketManager {
 
     public static void start() {
         if (task != null) stop();
-        try {
-            switch (type) {
-                case SERVER:
-                    ServerSocket server = new ServerSocket();
-                    task = new SyncketServerTask(server);
-                    task.runTaskAsynchronously(Syncket.getInstance());
-                    LogUtil.debug("Started syncket task type SERVER");
-                    break;
-                case CLIENT:
-                    Socket client = new Socket();
-                    task = new SyncketClientTask(client);
-                    task.runTaskAsynchronously(Syncket.getInstance());
-                    LogUtil.debug("Started syncket task type CLIENT");
-                    break;
-            }
-        } catch (IOException exception) {
-            LogUtil.severe("Cannot start syncket task!");
-            exception.printStackTrace();
+        switch (type) {
+            case SERVER:
+                task = new SyncketServerTask();
+                task.runTaskAsynchronously(Syncket.getInstance());
+                LogUtil.debug("Started syncket task type SERVER");
+                break;
+            case CLIENT:
+                task = new SyncketClientTask();
+                task.runTaskAsynchronously(Syncket.getInstance());
+                LogUtil.debug("Started syncket task type CLIENT");
+                break;
         }
     }
 

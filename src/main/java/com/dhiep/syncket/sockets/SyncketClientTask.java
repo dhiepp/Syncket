@@ -19,8 +19,7 @@ public class SyncketClientTask extends SyncketRunnable {
     private Scanner scanner;
     private PrintWriter writer;
 
-    public SyncketClientTask(Socket client) {
-        this.client = client;
+    public SyncketClientTask() {
         this.connect = true;
     }
 
@@ -61,12 +60,12 @@ public class SyncketClientTask extends SyncketRunnable {
                     }
                 }
             } catch (IOException exception) {
-                LogUtil.warn("Cannot connect to syncket server!");
+                LogUtil.debug("Cannot connect to syncket server!");
             }
 
             try {
                 client.close();
-                LogUtil.info("Connection to syncket server closed!");
+                LogUtil.debug("Connection to syncket server closed!");
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
