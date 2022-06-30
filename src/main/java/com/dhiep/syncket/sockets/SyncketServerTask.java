@@ -64,11 +64,11 @@ public class SyncketServerTask extends SyncketRunnable {
                 }
                 return true;
             case GROUP:
+                boolean sent1 = false;
                 if (SyncketManager.getGroup().equalsIgnoreCase(target)) {
                     SyncketManager.execute(source, action, data);
-                    return true;
+                    sent1 = true;
                 }
-                boolean sent1 = false;
                 for (SyncketServerThreadTask task : connectedTasks) {
                     if (task.getGroup().equalsIgnoreCase(target)) {
                         task.send(source, action, data);
