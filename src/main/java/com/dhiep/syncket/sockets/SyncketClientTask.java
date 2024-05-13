@@ -60,6 +60,11 @@ public class SyncketClientTask extends SyncketRunnable {
                     }
                 }
             } catch (IOException exception) {
+                // wait to reconnect
+                try {
+                    Thread.sleep(SyncketManager.getPulse());
+                } catch (InterruptedException ignored) {}
+
                 LogUtil.debug("Cannot connect to syncket server!");
             }
 
